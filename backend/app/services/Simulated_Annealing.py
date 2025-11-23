@@ -1,5 +1,6 @@
 import random
 import math
+import networkx as nx
 from A_star import AStarTransport 
 
 def simulated_annealing(G, raw_route, temperature=100.0, max_iter=50, alpha=0.99):
@@ -21,7 +22,7 @@ def simulated_annealing(G, raw_route, temperature=100.0, max_iter=50, alpha=0.99
 
     for iteration in range(max_iter):
         # Facem o mică schimbare: swap între două noduri (excluzând primul și ultimul)
-        if len(raw_route) > 2:  # verificăm să avem minim 3 noduri pentru swap
+        if len(raw_route) > 3:  # verificăm să avem minim 3 noduri pentru swap
             i, j = random.sample(range(1, len(raw_route)-1), 2)
             new_route = current_route[:]
             new_route[i], new_route[j] = new_route[j], new_route[i]
