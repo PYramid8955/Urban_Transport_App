@@ -48,4 +48,3 @@ class AStarTransport:
 
         return {'path': [], 'total_time': float('inf')}
 
-
