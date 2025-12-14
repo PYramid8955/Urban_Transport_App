@@ -142,12 +142,20 @@ body {
     font-size: 18px;
     border-radius: 14px;
     min-height: 120px;
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
-
+    position: relative;
     box-shadow: 0 12px 22px rgba(0,0,0,0.15);
 }
+
+#nothing_to_show {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .bg-bus {
     position: absolute;
     left: 0;
@@ -161,4 +169,29 @@ body {
     user-select: none;
 }
 
+.route-box {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    font-family: 'Inter', sans-serif;
+}
+
+.route-label {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    width: fit-content;
+}
+
+.route-path {
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+}
 

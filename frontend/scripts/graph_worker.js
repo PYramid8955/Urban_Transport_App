@@ -2,6 +2,19 @@ let stations = [];
 let originalCyData = null;
 let cy = null;
 
+const lineColors = [
+    "#e6194b", "#3cb44b", "#4363d8", "#f58231", "#911eb4",
+    "#46f0f0", "#f032e6", "#bcf60c", "#fabebe", "#008080",
+    "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3",
+    "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff",
+    "#ffe119", "#0000ff", "#ff7f00", "#4daf4a", "#984ea3",
+    "#a65628", "#f781bf", "#999999", "#e41a1c", "#377eb8",
+    "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628",
+    "#f781bf", "#999999", "#66c2a5", "#fc8d62", "#8da0cb",
+    "#e78ac3", "#a6d854", "#ffd92f", "#e5c494", "#b3b3b3",
+    "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e"
+];
+
 function setupDropdown(inputId, dropdownId) {
     const input = document.getElementById(inputId);
     const dropdown = document.getElementById(dropdownId);
@@ -48,7 +61,7 @@ async function tryPathCalculate() {
 
     if (from === "" || to === "") {
         rebuildCytoscape(originalCyData);
-        document.getElementById("resultBox").innerHTML = "";
+        document.getElementById("resultBox").innerHTML = "<div id = 'nothing_to_show'>Nothing to show here yet.</div>";
         return;
     }
 
@@ -60,9 +73,27 @@ async function tryPathCalculate() {
     const data = await res.json();
 
     const newGraph = data.graph;
-    const pathList = data.path;
+    const pathDict = data.path;
 
-    document.getElementById("resultBox").innerHTML = pathList.join(" → ");
+    let pathText = "";
+
+    for (const i of pathDict['order']) {
+        const value = pathDict[i];
+        const startStation = value[0];
+        const endStation = value[value.length - 1];
+        const color = lineColors[i] || "#777";
+
+        pathText += `
+            <div class="route-box" style="border-left: 8px solid ${color}">
+                <span class="route-label" style="background:${color}20; color:${color}">
+                    Route ${i}
+                </span>
+                <span class="route-path">${startStation} → ${endStation}</span>
+            </div>
+        `;
+    }
+
+    document.getElementById("resultBox").innerHTML = pathText;
 
     rebuildCytoscape(newGraph);
 }
@@ -76,19 +107,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function createCy(graphData) {
-    const lineColors = [
-        "#e6194b", "#3cb44b", "#4363d8", "#f58231", "#911eb4",
-        "#46f0f0", "#f032e6", "#bcf60c", "#fabebe", "#008080",
-        "#e6beff", "#9a6324", "#fffac8", "#800000", "#aaffc3",
-        "#808000", "#ffd8b1", "#000075", "#808080", "#ffffff",
-        "#ffe119", "#0000ff", "#ff7f00", "#4daf4a", "#984ea3",
-        "#a65628", "#f781bf", "#999999", "#e41a1c", "#377eb8",
-        "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628",
-        "#f781bf", "#999999", "#66c2a5", "#fc8d62", "#8da0cb",
-        "#e78ac3", "#a6d854", "#ffd92f", "#e5c494", "#b3b3b3",
-        "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e"
-    ];
-
     cy = cytoscape({
         container: document.querySelector(".graph-box"),
         elements: graphData.elements,

@@ -1,8 +1,7 @@
-# here we use everything to create routes, edit the database and so on
+# here we combine everything
 from app.services import *
 import networkx as nx
 from math import ceil
-from app.utils import multigraph_to_cytoscape_json
 
 class RouteManager:
     # the desired route lenght in minutes (approx.), one way
@@ -149,7 +148,27 @@ class RouteManager:
 
         astar = AStarTransport(G_simple)
         result = astar.find_path(start, end)
+
         path = result["path"]
+        path_processed = {'order': []}
+        route_order = path_processed['order']
+
+        for i in range(len(path)-1):
+            u, v = path[i], path[i+1]
+
+            if R.has_edge(u, v):
+                # Check all parallel edges
+                for key, attrs in R[u][v].items():
+                    route_number = attrs["number"]
+
+                    if not len(route_order) or route_order[-1] != route_number: route_order.append(route_number)
+
+                    if route_number not in path_processed:
+                        path_processed[route_number] = [u, v]
+                    else:
+                        path_processed[route_number].append(v)
+
+
         out = nx.MultiGraph()
 
         out.add_nodes_from(path)
@@ -161,7 +180,7 @@ class RouteManager:
                 for key, attrs in R[u][v].items():
                     out.add_edge(u, v, **attrs)
 
-        return {'graph': out, 'path': path}
+        return {'graph': out, 'path': path_processed}
 
 
     @staticmethod
@@ -193,5 +212,3 @@ if __name__ == "__main__":
 
     RouteManager.print_routes_sorted(R)
     
-
-    # multigraph_to_cytoscape_json(R, "graph.json")
