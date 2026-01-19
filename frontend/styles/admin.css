@@ -171,9 +171,11 @@ body {
     font-size: 18px;
     border-radius: 14px;
     min-height: 120px;
-    display: flex;
+    display: block !important;
     justify-content: center;
     align-items: center;
+    max-width: 450px;
+    overflow-y: auto;
 }
 
 /* BUS IMAGE */

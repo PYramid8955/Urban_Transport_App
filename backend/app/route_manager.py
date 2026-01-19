@@ -201,8 +201,6 @@ class RouteManager:
 
             print(f"{u} -> {v}")
 
-
-
 if __name__ == "__main__":
     G = nx.read_gexf('../data/map/graph_10nodes_100density.gexf')
     rm = RouteManager(G)
@@ -211,4 +209,3 @@ if __name__ == "__main__":
     nx.write_gexf(R, "routes_.gexf")
 
     RouteManager.print_routes_sorted(R)
-    

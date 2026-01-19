@@ -1,6 +1,7 @@
 let stations = [];
 let originalCyData = null;
 let cy = null;
+let initialSnapshot = null;
 
 const lineColors = [
     "#e6194b", "#3cb44b", "#4363d8", "#f58231", "#911eb4",
@@ -60,7 +61,7 @@ async function tryPathCalculate() {
     const to = document.getElementById("toInput").value.trim();
 
     if (from === "" || to === "") {
-        rebuildCytoscape(originalCyData);
+        restoreInitialGraph();
         document.getElementById("resultBox").innerHTML = "<div id = 'nothing_to_show'>Nothing to show here yet.</div>";
         return;
     }
@@ -135,9 +136,37 @@ function createCy(graphData) {
         ],
         layout: { name: "cose", animate: true }
     });
+
+    // IMPORTANT: snapshot AFTER first layout
+    cy.ready(() => {
+        initialSnapshot = {
+            elements: cy.json().elements,
+            positions: cy.nodes().map(n => ({
+                id: n.id(),
+                position: n.position()
+            }))
+        };
+
+    });
 }
 
+
 function rebuildCytoscape(graphData) {
-    cy.json({ elements: graphData.elements });
+    cy.elements().remove();
+    cy.add(graphData.elements);
     cy.layout({ name: "cose", animate: true }).run();
+}
+
+function restoreInitialGraph() {
+    if (!initialSnapshot) return;
+
+    cy.elements().remove();
+    cy.add(initialSnapshot.elements);
+
+    initialSnapshot.positions.forEach(p => {
+        const node = cy.getElementById(p.id);
+        if (node) node.position(p.position);
+    });
+
+    cy.fit(undefined, 30);
 }

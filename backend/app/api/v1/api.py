@@ -39,8 +39,13 @@ print("Frontend resolved path:", FRONTEND_DIR)
 
 app = FastAPI(title=settings.APP_NAME)
 
-# Mount static frontend (css/js/html if needed)
-app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+from fastapi.staticfiles import StaticFiles
+
+app.mount(
+    "/static",
+    StaticFiles(directory=FRONTEND_DIR, html=False, check_dir=True),
+    name="static",
+)
 
 security = Security(secret_key=settings.SECRET_KEY)
 
