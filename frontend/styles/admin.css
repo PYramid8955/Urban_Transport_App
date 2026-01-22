@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: white;
+}
+
+/* NAVBAR */
+.navbar {
+    width: 100%;
+    height: 65px;
+    background: linear-gradient(to right, black, #1d5fff);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.33);
+    position: relative;
+    z-index: 8;
+}
+
+.nav-left span {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.nav-left i {
+    font-style: italic;
+}
+
+.admin-panel-title {
+    color: #b00000;
+    font-weight: 800;
+}
+
+/* USER VIEW BUTTON */
+.admin-btn {
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 8px 20px;
+    border: 2px solid white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* MAIN LAYOUT */
+.container {
+    display: flex;
+    height: calc(100vh - 65px);
+}
+
+/* LEFT GRAPH AREA */
+.graph-area {
+    width: 70%;
+    padding: 30px;
+}
+
+.graph-box {
+    width: 100%;
+    height: 100%;
+    background: #f1f3f8;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.placeholder-text {
+    font-size: 22px;
+    opacity: 0.5;
+}
+
+/* RIGHT SIDE PANELS */
+.right-panels {
+    width: 30%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+    z-index: 5;
+}
+
+.panel {
+    background: #f1f3f8;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.15);
+}
+
+/* TEXTS */
+.panel h2 {
+    margin-bottom: 18px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* INPUT FIELDS */
+.input-group {
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 1px solid #c5c8d0;
+}
+
+.input-group input:focus {
+    border-color: #1d5fff;
+}
+
+/* DROPDOWN */
+.dropdown {
+    list-style: none;
+    background: white;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 1px solid #d1d4dc;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown li {
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+.dropdown li:hover {
+    background: #e9e9e9;
+}
+
+.hidden {
+    display: none;
+}
+
+/* RESULT BOX */
+.result-box {
+    margin-top: 20px;
+    background: #f1f3f8;
+    padding: 25px;
+    font-size: 18px;
+    border-radius: 14px;
+    min-height: 120px;
+    display: block !important;
+    justify-content: center;
+    align-items: center;
+    max-width: 450px;
+    overflow-y: auto;
+}
+
+/* BUS IMAGE */
+.bg-bus {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    opacity: 0.25;
+    height: 260px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+#right_nav_btns {
+    width: fit-content;
+    height: 65px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    gap: 20px;
+}
+
+#Garage_Screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20vw;
+    height: 20vh;
+    transition: .15s linear;
+    z-index: 10;
+    border-radius: 16px;
+    background: #f1f3f8;
+    overflow: hidden;
+}
+
+#panel {
+    z-index: 9;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.442);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#close_garage_screen {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #f1f3f8;
+    background: rgb(17, 17, 17);
+    border-radius: 7px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+#Garage_Screen>.graph-area>.graph-box {
+    background: #ccd1de !important;
+}
+
+#Garage_Screen>.graph-area {
+    width: 100% !important;
+    height: 100%;
+    padding: 0 !important;
+}
+
+#cy-garages {
+    height: calc(100vh - 60px);
+    width: calc(100vw - 60px);
+}
