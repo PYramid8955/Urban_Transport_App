@@ -2,6 +2,26 @@ export let cy = null;
 export let initialSnapshot = null;
 export let stations = [];
 
+function disableInputs() {
+  document.getElementById("fromInput").disabled = true;
+  document.getElementById("toInput").disabled = true;
+}
+
+function enableAndClearInputs() {
+  const from = document.getElementById("fromInput");
+  const to = document.getElementById("toInput");
+
+  from.disabled = false;
+  to.disabled = false;
+
+  from.value = "";
+  to.value = "";
+
+  document.getElementById("fromDropdown").classList.add("hidden");
+  document.getElementById("toDropdown").classList.add("hidden");
+}
+
+
 export function updateSnapshotFromCurrentGraph() {
     if (!cy) return;
 
@@ -102,10 +122,17 @@ export async function tryPathCalculate() {
     const to = document.getElementById("toInput").value.trim();
 
     if (from === "" || to === "") {
-        restoreInitialGraph();
-        document.getElementById("resultBox").innerHTML = "<div id = 'nothing_to_show'>Nothing to show here yet.</div>";
+        // Do NOTHING to the graph
+        document.getElementById("resultBox").innerHTML =
+            "<div id='nothing_to_show'>Nothing to show here yet.</div>";
         return;
     }
+
+    if (!stations.includes(from) || !stations.includes(to)) {
+        // Still do NOTHING to the graph
+        return;
+    }
+
 
     if (!stations.includes(from) || !stations.includes(to)) return;
 
@@ -136,6 +163,7 @@ export async function tryPathCalculate() {
     }
 
     document.getElementById("resultBox").innerHTML = pathText;
+    disableInputs();
 
     rebuildCytoscape(newGraph);
 }
@@ -148,41 +176,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function createCy(graphData) {
-    cy = cytoscape({
-        container: document.querySelector(".graph-box"),
-        elements: graphData.elements,
-        style: [
-            {
-                selector: "node",
-                style: {
-                    "background-color": "#888",
-                    "label": "data(label)",
-                    "color": "#000",
-                    "font-size": "12px",
-                    "text-valign": "center",
-                    "text-halign": "center"
-                }
-            },
-            {
-                selector: "edge",
-                style: {
-                    "width": 3,
-                    "curve-style": "bezier",
-                    "line-color": ele => lineColors[ele.data("number")] || "#888",
-                    "target-arrow-shape": "none",
-                    "source-arrow-shape": "none"
-                }
-            }
-        ],
-        layout: { name: "cose", animate: true }
-    });
+  cy = cytoscape({
+    container: document.querySelector(".graph-box"),
+    elements: graphData.elements,
+    style: [
+      {
+        selector: "node",
+        style: {
+          "background-color": "#888",
+          "label": "data(label)",
+          "color": "#000",
+          "font-size": "12px",
+          "text-valign": "center",
+          "text-halign": "center"
+        }
+      },
+      {
+        selector: "edge",
+        style: {
+          "width": 3,
+          "curve-style": "bezier",
+          "line-color": ele => lineColors[ele.data("number")] || "#888",
+          "target-arrow-shape": "none",
+          "source-arrow-shape": "none"
+        }
+      }
+    ],
+    layout: { name: "cose", animate: true }
+  });
 
-    // IMPORTANT: snapshot AFTER first layout
-    cy.ready(() => {
-        updateSnapshotFromCurrentGraph();
-    });
-
+  // ⬇️ SNAPSHOT ONLY AFTER COSE FINISHES
+  cy.once("layoutstop", () => {
+    updateSnapshotFromCurrentGraph();
+  });
 }
+
 
 
 function rebuildCytoscape(graphData) {
@@ -190,3 +218,11 @@ function rebuildCytoscape(graphData) {
     cy.add(graphData.elements);
     cy.layout({ name: "cose", animate: true }).run();
 }
+
+document.getElementById("clear-btn").addEventListener("click", () => {
+  enableAndClearInputs();
+  restoreInitialGraph();
+
+  document.getElementById("resultBox").innerHTML =
+    "<div id='nothing_to_show'>Nothing to show here yet.</div>";
+});

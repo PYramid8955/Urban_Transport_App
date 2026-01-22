@@ -146,23 +146,6 @@ body {
     display: none;
 }
 
-/* DELETE BUTTON */
-.delete-btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: #cecece;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.delete-btn:hover {
-    background: #d9534f;
-    color: white;
-}
-
 /* RESULT BOX */
 .result-box {
     margin-top: 20px;
