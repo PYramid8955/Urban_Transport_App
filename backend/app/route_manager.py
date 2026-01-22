@@ -34,7 +34,6 @@ class RouteManager:
             routes_obj=self.Routes_obj,
             garages_supply=self.Garages
         )
-        print(self.Routes_obj)
 
     def compute_time(self, path):
         res = 0

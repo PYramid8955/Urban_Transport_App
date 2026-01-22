@@ -16,7 +16,11 @@ def solve_min_cost_flow(G, R, routes_obj, garages_supply):
     """
     route_station = {}  # route_number -> station_name
 
+
     routes = routes_obj["obj"]
+    
+    route_supplied = {r.number: 0 for r in routes}
+    route_demand = {r.number: r.demand for r in routes}
 
     # --- index mapping ---
     garage_nodes = list(garages_supply.keys())
@@ -110,15 +114,6 @@ def solve_min_cost_flow(G, R, routes_obj, garages_supply):
     for g in garage_nodes:
         sol.add_node(g, is_garage=True, label=g)
 
-    for r in route_nodes:
-        station = route_station.get(r)
-        label = f"R{r}"
-        if station:
-            label += f"\n{station}"
-
-        sol.add_node(r, is_route=True, label=label)
-
-
     for gi, g in enumerate(garage_nodes):
         u = garage_offset + gi
         for e in graph[u]:
@@ -127,6 +122,8 @@ def solve_min_cost_flow(G, R, routes_obj, garages_supply):
                 if used > 0:
                     r_idx = e.to - route_offset
                     route_number = route_nodes[r_idx]
+                    
+                    route_supplied[route_number] += used
 
                     sol.add_edge(
                         g,
@@ -135,6 +132,18 @@ def solve_min_cost_flow(G, R, routes_obj, garages_supply):
                         cost=e.cost,
                         route=route_number
                     )
+    for r in route_nodes:
+        station = route_station.get(r)
+        supplied = route_supplied.get(r, 0)
+        demand = route_demand.get(r, 0)
+
+        label = f"R{r}\n{supplied}/{demand}"
+        if station:
+            label += f"\n{station}"
+
+        sol.add_node(r, is_route=True, label=label)
+
+        print(f"[Route {r}] supplied: {supplied}/{demand} at station {station}")
 
 
     return sol
